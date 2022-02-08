@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Microsoft.Azure.Functions.Extensions.DependencyInjection;
+﻿using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -19,6 +18,8 @@ namespace AnnouncementsApiFunctionsApp
 
             builder.Services.AddAutoMapper(cfg =>
                 cfg.AddProfile<AnnouncementMappingProfile>());
+
+            builder.Services.AddScoped<IAnnouncementService, AnnouncementService>();
         }
     }
 }
