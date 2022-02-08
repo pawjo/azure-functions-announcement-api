@@ -5,6 +5,8 @@ namespace AnnouncementsApiFunctionsApp
 {
     public interface IAnnouncementService
     {
-        public Task<AnnouncementResponse[]> GetList();
+        public Task<AnnouncementResponse[]> GetListAsync();
+
+        public Task<bool> AddAsync(AddAnnouncementRequest request);
     }
 }

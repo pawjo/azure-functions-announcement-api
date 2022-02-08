@@ -1,4 +1,5 @@
-﻿using AnnouncementsApiFunctionsApp.Dtos;
+﻿using AnnouncementsApiFunctionsApp.Domain;
+using AnnouncementsApiFunctionsApp.Dtos;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
@@ -16,7 +17,23 @@ namespace AnnouncementsApiFunctionsApp
             _mapper = mapper;
         }
 
-        public async Task<AnnouncementResponse[]> GetList()
+        public async Task<bool> AddAsync(AddAnnouncementRequest request)
+        {
+            if (request == null || request.Title == null
+                   || request.AnnouncementType == null)
+            {
+                return false;
+            }
+
+            var announcement = _mapper.Map<Announcement>(request);
+
+            await _context.Announcement.AddAsync(announcement);
+            int added = await _context.SaveChangesAsync();
+
+            return added == 1;
+        }
+
+        public async Task<AnnouncementResponse[]> GetListAsync()
         {
             var announcements = await _context.Announcement.ToListAsync();
 
