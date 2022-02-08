@@ -1,3 +1,5 @@
+using AnnouncementsApiFunctionsApp.Dtos;
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
@@ -10,10 +12,12 @@ namespace AnnouncementsApiFunctionsApp
     public class AnnouncementFunctions
     {
         private readonly AnnouncementFAContext _context;
+        private readonly IMapper _mapper;
 
-        public AnnouncementFunctions(AnnouncementFAContext context)
+        public AnnouncementFunctions(AnnouncementFAContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         [FunctionName("GetAnnouncementList")]
@@ -22,7 +26,9 @@ namespace AnnouncementsApiFunctionsApp
         {
             var announcements = await _context.Announcement.ToListAsync();
 
-            return new OkObjectResult(announcements);
+            var response = _mapper.Map<AnnouncementResponse[]>(announcements);
+
+            return new OkObjectResult(response);
         }
     }
 }

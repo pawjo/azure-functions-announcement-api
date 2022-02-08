@@ -27,6 +27,11 @@ namespace AnnouncementsApiFunctionsApp
             {
                 entity.HasNoKey();
 
+                entity.Property(e => e.AnnouncementType)
+                    .IsRequired()
+                    .HasMaxLength(30)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.Content).HasMaxLength(500);
 
                 entity.Property(e => e.Id).ValueGeneratedOnAdd();

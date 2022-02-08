@@ -1,6 +1,6 @@
-﻿using Microsoft.Azure.Functions.Extensions.DependencyInjection;
+﻿using AutoMapper;
+using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 
@@ -16,6 +16,9 @@ namespace AnnouncementsApiFunctionsApp
 
             builder.Services.AddDbContext<AnnouncementFAContext>(options =>
                 SqlServerDbContextOptionsExtensions.UseSqlServer(options, connectionString));
+
+            builder.Services.AddAutoMapper(cfg =>
+                cfg.AddProfile<AnnouncementMappingProfile>());
         }
     }
 }

@@ -12,6 +12,6 @@ namespace AnnouncementsApiFunctionsApp
         public int Id { get; set; }
         public string Title { get; set; }
         public string Content { get; set; }
-        public int AnnouncementType { get; set; }
+        public string AnnouncementType { get; set; }
     }
 }
