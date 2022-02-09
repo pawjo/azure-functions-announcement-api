@@ -11,6 +11,21 @@ namespace AnnouncementsApiFunctionsApp
             CreateMap<Announcement, AnnouncementResponse>();
 
             CreateMap<AddAnnouncementRequest, Announcement>();
+
+            CreateMap<UpdateAnnouncementRequest, Announcement>()
+                .ConvertUsing((src, dest) =>
+                {
+                    if (src == null)
+                    {
+                        return null;
+                    }
+
+                    dest.Title = src.Title;
+                    dest.Content = src.Content;
+                    dest.AnnouncementType = src.AnnouncementType;
+
+                    return dest;
+                });
         }
     }
 }

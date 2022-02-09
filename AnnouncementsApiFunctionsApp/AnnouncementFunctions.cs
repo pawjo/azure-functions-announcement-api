@@ -63,12 +63,28 @@ namespace AnnouncementsApiFunctionsApp
         {
             var response = await _service.GetById(id);
 
-            if(response == null)
+            if (response == null)
             {
                 return new NotFoundResult();
             }
 
             return new OkObjectResult(response);
+        }
+
+        [FunctionName("UpdateAnnouncement")]
+        public async Task<IActionResult> UpdateAsync(
+            [HttpTrigger(AuthorizationLevel.Function, "put", Route = baseRoute)] HttpRequest req)
+        {
+            string requestBody = String.Empty;
+            using (StreamReader streamReader = new StreamReader(req.Body))
+            {
+                requestBody = await streamReader.ReadToEndAsync();
+            }
+
+            var updateRequest = JsonConvert.DeserializeObject<UpdateAnnouncementRequest>(requestBody);
+            bool response = await _service.UpdateAsync(updateRequest);
+
+            return new OkObjectResult(successResponseText + response);
         }
     }
 }

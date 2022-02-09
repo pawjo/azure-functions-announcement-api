@@ -66,6 +66,23 @@ namespace AnnouncementsApiFunctionsApp
             return result;
         }
 
+        public async Task<bool> UpdateAsync(UpdateAnnouncementRequest request)
+        {
+            var announcement = await GetByIdFromContext(request.Id);
+
+            if (announcement == null)
+            {
+                return false;
+            }
+
+            announcement = _mapper.Map<UpdateAnnouncementRequest, Announcement>(request, announcement);
+
+            _context.Announcement.Update(announcement);
+            int updated = await _context.SaveChangesAsync();
+
+            return updated == 1;
+        }
+
         private async Task<Announcement> GetByIdFromContext(int id) =>
             await _context.Announcement.SingleOrDefaultAsync(x => x.Id == id);
     }
