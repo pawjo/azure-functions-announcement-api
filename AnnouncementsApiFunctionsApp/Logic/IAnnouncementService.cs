@@ -8,5 +8,7 @@ namespace AnnouncementsApiFunctionsApp
         public Task<AnnouncementResponse[]> GetListAsync();
 
         public Task<bool> AddAsync(AddAnnouncementRequest request);
+
+        public Task<bool> DeleteAsync(int id);
     }
 }

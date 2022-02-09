@@ -33,6 +33,21 @@ namespace AnnouncementsApiFunctionsApp
             return added == 1;
         }
 
+        public async Task<bool> DeleteAsync(int id)
+        {
+            var announcement = await _context.Announcement.SingleOrDefaultAsync(x => x.Id == id);
+
+            if (announcement == null)
+            {
+                return false;
+            }
+
+            _context.Announcement.Remove(announcement);
+            int deleted = await _context.SaveChangesAsync();
+
+            return deleted == 1;
+        }
+
         public async Task<AnnouncementResponse[]> GetListAsync()
         {
             var announcements = await _context.Announcement.ToListAsync();
