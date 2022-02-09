@@ -2,6 +2,8 @@
 using AnnouncementsApiFunctionsApp.Dtos;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace AnnouncementsApiFunctionsApp
@@ -57,11 +59,37 @@ namespace AnnouncementsApiFunctionsApp
             return result;
         }
 
-        public async Task<AnnouncementResponse[]> GetListAsync()
+        public async Task<List<AnnouncementResponse>> GetListAsync(string searchText, string typeFilter, int pageNumber, int elementsOnPage)
         {
-            var announcements = await _context.Announcement.ToListAsync();
+            List<Announcement> announcements;
 
-            var result = _mapper.Map<AnnouncementResponse[]>(announcements);
+            // filter
+            if (typeFilter != null)
+            {
+                announcements = await _context.Announcement
+                    .Where(x => x.AnnouncementType == typeFilter).ToListAsync();
+            }
+            else
+            {
+                announcements = await _context.Announcement.ToListAsync();
+            }
+
+            // search
+            if (searchText != null)
+            {
+                var searchKeys = searchText.Split(' ');
+                announcements = announcements.Where(x =>
+                    searchKeys.Any(key => x.Title.Contains(key))).ToList();
+            }
+
+            // paging
+            if (pageNumber > 0 && elementsOnPage > 0)
+            {
+                announcements = announcements.Skip((pageNumber - 1) * elementsOnPage)
+                  .Take(elementsOnPage).ToList();
+            }
+
+            var result = _mapper.Map<List<AnnouncementResponse>>(announcements);
 
             return result;
         }

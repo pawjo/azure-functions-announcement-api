@@ -52,7 +52,16 @@ namespace AnnouncementsApiFunctionsApp
         public async Task<IActionResult> GetList(
             [HttpTrigger(AuthorizationLevel.Function, "get", Route = baseRoute + "/get-list")] HttpRequest req)
         {
-            var response = await _service.GetListAsync();
+            string searchText = req.Query["searchText"];
+            string typeFilter = req.Query["announcementType"];
+            
+            int pageNumber = 0;
+            int.TryParse(req.Query["pageNumber"], out pageNumber);
+            
+            int elementsOnPage = 0;
+            int.TryParse(req.Query["elementsOnPage"], out elementsOnPage);
+
+            var response = await _service.GetListAsync(searchText, typeFilter, pageNumber, elementsOnPage);
 
             return new OkObjectResult(response);
         }
