@@ -10,5 +10,7 @@ namespace AnnouncementsApiFunctionsApp
         public Task<bool> AddAsync(AddAnnouncementRequest request);
 
         public Task<bool> DeleteAsync(int id);
+
+        public Task<AnnouncementResponse> GetById(int id);
     }
 }

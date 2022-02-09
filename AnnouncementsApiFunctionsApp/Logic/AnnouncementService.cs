@@ -35,7 +35,7 @@ namespace AnnouncementsApiFunctionsApp
 
         public async Task<bool> DeleteAsync(int id)
         {
-            var announcement = await _context.Announcement.SingleOrDefaultAsync(x => x.Id == id);
+            var announcement = await GetByIdFromContext(id);
 
             if (announcement == null)
             {
@@ -48,6 +48,15 @@ namespace AnnouncementsApiFunctionsApp
             return deleted == 1;
         }
 
+        public async Task<AnnouncementResponse> GetById(int id)
+        {
+            var announcement = await GetByIdFromContext(id);
+
+            var result = _mapper.Map<AnnouncementResponse>(announcement);
+
+            return result;
+        }
+
         public async Task<AnnouncementResponse[]> GetListAsync()
         {
             var announcements = await _context.Announcement.ToListAsync();
@@ -56,5 +65,8 @@ namespace AnnouncementsApiFunctionsApp
 
             return result;
         }
+
+        private async Task<Announcement> GetByIdFromContext(int id) =>
+            await _context.Announcement.SingleOrDefaultAsync(x => x.Id == id);
     }
 }

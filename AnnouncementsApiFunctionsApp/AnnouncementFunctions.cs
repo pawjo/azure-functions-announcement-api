@@ -15,6 +15,7 @@ namespace AnnouncementsApiFunctionsApp
         private readonly IAnnouncementService _service;
 
         private const string baseRoute = "announcement";
+        private const string routeWithId = baseRoute + "/{id:int}";
         private const string successResponseText = "Success: ";
 
         public AnnouncementFunctions(IAnnouncementService service)
@@ -40,7 +41,7 @@ namespace AnnouncementsApiFunctionsApp
 
         [FunctionName("DeleteAnnouncement")]
         public async Task<IActionResult> DeleteAsync(
-            [HttpTrigger(AuthorizationLevel.Function, "delete", Route = baseRoute + "/{id:int}")] HttpRequest req, int id)
+            [HttpTrigger(AuthorizationLevel.Function, "delete", Route = routeWithId)] HttpRequest req, int id)
         {
             var response = await _service.DeleteAsync(id);
 
@@ -52,6 +53,20 @@ namespace AnnouncementsApiFunctionsApp
             [HttpTrigger(AuthorizationLevel.Function, "get", Route = baseRoute + "/get-list")] HttpRequest req)
         {
             var response = await _service.GetListAsync();
+
+            return new OkObjectResult(response);
+        }
+
+        [FunctionName("GetAnnouncementById")]
+        public async Task<IActionResult> GetById(
+            [HttpTrigger(AuthorizationLevel.Function, "get", Route = routeWithId)] HttpRequest req, int id)
+        {
+            var response = await _service.GetById(id);
+
+            if(response == null)
+            {
+                return new NotFoundResult();
+            }
 
             return new OkObjectResult(response);
         }
