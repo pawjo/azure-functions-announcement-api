@@ -103,7 +103,7 @@ namespace AnnouncementsApiFunctionsApp
             {
                 var searchKeys = searchText.Split(' ');
                 announcements = announcements.Where(x =>
-                    searchKeys.Any(key => x.Title.Contains(key))).ToList();
+                    SearchFilter(x, searchKeys)).ToList();
             }
 
             // paging
@@ -153,5 +153,11 @@ namespace AnnouncementsApiFunctionsApp
 
         private async Task<Announcement> GetByIdFromContext(int id) =>
             await _context.Announcement.SingleOrDefaultAsync(x => x.Id == id);
+
+        private static bool SearchFilter(Announcement announcement, string[] searchKeys)
+        {
+            string titleToLower = announcement.Title.ToLower();
+            return searchKeys.Any(key => titleToLower.Contains(key.ToLower()));
+        }
     }
 }
