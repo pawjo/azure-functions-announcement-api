@@ -67,10 +67,10 @@ namespace AnnouncementsApiFunctionsApp
         }
 
         [FunctionName("GetAnnouncementById")]
-        public async Task<IActionResult> GetById(
+        public async Task<IActionResult> GetByIdAsync(
             [HttpTrigger(AuthorizationLevel.Function, "get", Route = routeWithId)] HttpRequest req, int id)
         {
-            var result = await _service.GetById(id);
+            var result = await _service.GetByIdAsync(id);
 
             if (result.IsError)
             {
@@ -81,7 +81,7 @@ namespace AnnouncementsApiFunctionsApp
         }
 
         [FunctionName("GetAnnouncementList")]
-        public async Task<IActionResult> GetList(
+        public async Task<IActionResult> GetListAsync(
             [HttpTrigger(AuthorizationLevel.Function, "get", Route = baseRoute + "/get-list")] HttpRequest req)
         {
             string searchText = req.Query["searchText"];

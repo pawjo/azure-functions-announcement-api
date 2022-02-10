@@ -66,7 +66,7 @@ namespace AnnouncementsApiFunctionsApp
             return new Result<bool>(true);
         }
 
-        public async Task<Result<AnnouncementResponse>> GetById(int id)
+        public async Task<Result<AnnouncementResponse>> GetByIdAsync(int id)
         {
             var announcement = await GetByIdFromContext(id);
 

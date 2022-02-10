@@ -11,7 +11,7 @@ namespace AnnouncementsApiFunctionsApp
 
         public Task<Result<bool>> DeleteAsync(int id);
 
-        public Task<Result<AnnouncementResponse>> GetById(int id);
+        public Task<Result<AnnouncementResponse>> GetByIdAsync(int id);
 
         public Task<Result<List<AnnouncementResponse>>> GetListAsync(string searchText, string typeFilter, int pageNumber, int elementsOnPage);
 
