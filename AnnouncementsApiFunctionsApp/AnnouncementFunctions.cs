@@ -34,18 +34,50 @@ namespace AnnouncementsApiFunctionsApp
             }
 
             var addRequest = JsonConvert.DeserializeObject<AddAnnouncementRequest>(requestBody);
-            bool response = await _service.AddAsync(addRequest);
+            var result = await _service.AddAsync(addRequest);
 
-            return new OkObjectResult(successResponseText + response);
+            if (result.ErrorCode == 400)
+            {
+                return new BadRequestObjectResult(result.ErrorMessage);
+            }
+            else if (result.IsError)
+            {
+                return new StatusCodeResult(result.ErrorCode);
+            }
+
+            return new OkObjectResult($"New id: " + result.Response);
         }
 
         [FunctionName("DeleteAnnouncement")]
         public async Task<IActionResult> DeleteAsync(
             [HttpTrigger(AuthorizationLevel.Function, "delete", Route = routeWithId)] HttpRequest req, int id)
         {
-            var response = await _service.DeleteAsync(id);
+            var result = await _service.DeleteAsync(id);
 
-            return new OkObjectResult(successResponseText + response);
+            if (result.ErrorCode == 404)
+            {
+                return new NotFoundObjectResult(result.ErrorMessage);
+            }
+            else if (result.IsError)
+            {
+                return new StatusCodeResult(result.ErrorCode);
+            }
+
+            return new OkObjectResult(successResponseText + result.Response);
+        }
+
+        [FunctionName("GetAnnouncementById")]
+        public async Task<IActionResult> GetById(
+            [HttpTrigger(AuthorizationLevel.Function, "get", Route = routeWithId)] HttpRequest req, int id)
+        {
+            var result = await _service.GetById(id);
+
+            if (result.IsError)
+            {
+                return new NotFoundObjectResult(result.ErrorMessage);
+            }
+
+            return new OkObjectResult(result.Response);
         }
 
         [FunctionName("GetAnnouncementList")]
@@ -54,30 +86,21 @@ namespace AnnouncementsApiFunctionsApp
         {
             string searchText = req.Query["searchText"];
             string typeFilter = req.Query["announcementType"];
-            
+
             int pageNumber = 0;
             int.TryParse(req.Query["pageNumber"], out pageNumber);
-            
+
             int elementsOnPage = 0;
             int.TryParse(req.Query["elementsOnPage"], out elementsOnPage);
 
-            var response = await _service.GetListAsync(searchText, typeFilter, pageNumber, elementsOnPage);
+            var result = await _service.GetListAsync(searchText, typeFilter, pageNumber, elementsOnPage);
 
-            return new OkObjectResult(response);
-        }
-
-        [FunctionName("GetAnnouncementById")]
-        public async Task<IActionResult> GetById(
-            [HttpTrigger(AuthorizationLevel.Function, "get", Route = routeWithId)] HttpRequest req, int id)
-        {
-            var response = await _service.GetById(id);
-
-            if (response == null)
+            if (result.IsError)
             {
-                return new NotFoundResult();
+                return new BadRequestObjectResult(result.ErrorMessage);
             }
 
-            return new OkObjectResult(response);
+            return new OkObjectResult(result.Response);
         }
 
         [FunctionName("UpdateAnnouncement")]
@@ -91,9 +114,18 @@ namespace AnnouncementsApiFunctionsApp
             }
 
             var updateRequest = JsonConvert.DeserializeObject<UpdateAnnouncementRequest>(requestBody);
-            bool response = await _service.UpdateAsync(updateRequest);
+            var result = await _service.UpdateAsync(updateRequest);
 
-            return new OkObjectResult(successResponseText + response);
+            if (result.ErrorCode == 404)
+            {
+                return new NotFoundObjectResult(result.ErrorMessage);
+            }
+            else if (result.IsError)
+            {
+                return new StatusCodeResult(result.ErrorCode);
+            }
+
+            return new OkObjectResult(successResponseText + result.Response);
         }
     }
 }
