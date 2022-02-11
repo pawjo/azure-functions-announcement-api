@@ -1,4 +1,5 @@
 ﻿using AnnouncementsApiFunctionsApp.Domain;
+using AutoMapper;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
