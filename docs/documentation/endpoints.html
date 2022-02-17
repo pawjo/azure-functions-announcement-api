@@ -1,0 +1,19 @@
+---
+layout: page
+title: Endpoints
+permalink: /documentation/endpoints/
+---
+
+{% for endpoint in site.endpoints %}
+<div class="post-content">
+  <h4> {{ endpoint.name }} - {{ endpoint.type }}</h4>
+  <code >{{ endpoint.api_url}}</code>
+  <p>{{ endpoint.content | markdownify }}</p>
+</div>
+{% endfor %}
+
+<!-- {% for endpoint in site.endpoints %}
+  ## {{ endpoint.name }} - {{ endpoint.type }}
+  {{ endpoint.api_url}}
+  {{ endpoint.content | markdownify }}
+{% endfor %} -->
