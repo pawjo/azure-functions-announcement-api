@@ -1,6 +1,6 @@
 ---
 layout: default
-title: About
+title: About theme
 permalink: /about/
 ---
 
