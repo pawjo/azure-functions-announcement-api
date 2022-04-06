@@ -27,7 +27,7 @@ description: >- # this means to ignore newlines until "baseurl:"
 domain: 
 # baseurl: https://pawjo.github.io # the subpath of your site, e.g. /blog
 baseurl: /azure-functions-announcement-api
-url:  http://pawjo.github.io
+url:  https://pawjo.github.io
 github_username:  pawjo
 
 # Build settings
