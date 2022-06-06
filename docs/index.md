@@ -13,4 +13,4 @@ This is an example of Azure Function App used as API. It is also sample document
 
 # Documentation
 - [About theme](/about.md)
-- [Endpoints](/documentation/endpoints.md)
+- [Endpoints](documentation/endpoints)
